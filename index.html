@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сфера</title>
+    <link rel="stylesheet" href="style_site.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- МОДАЛЬНОЕ ОКНО СОЗДАНИЯ ПРОЕКТА -->
+<div class="modal-overlay" id="createProjectModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Создать новый проект</h3>
+            <p>Введите название для вашего LaTeX проекта</p>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+                <label for="projectName">Название проекта</label>
+                <input 
+                    type="text" 
+                    id="projectName" 
+                    placeholder="Например: Курсовая работа"
+                    autocomplete="off"
+                    maxlength="50"
+                >
+                <div class="hint">Можно использовать буквы, цифры, пробелы и дефисы</div>
+                <div class="error-message" id="projectNameError"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" id="cancelProjectBtn">Отмена</button>
+            <button class="btn-primary" id="confirmProjectBtn">Создать проект</button>
+        </div>
+    </div>
+</div>
+ <div class="container">
+        <!-- НАВИГАЦИОННОЕ МЕНЮ -->
+        <nav class="navbar">
+          <div class="logo-wrapper">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Градиенты -->
+                        <defs>
+                            <radialGradient id="sphereGradient" cx="35%" cy="30%" r="50%" fx="30%" fy="25%">
+                                <stop offset="0%" stop-color="#4A8BFF" stop-opacity="1" />
+                                <stop offset="60%" stop-color="#2C6BFF" stop-opacity="1" />
+                                <stop offset="100%" stop-color="#0F3B9E" stop-opacity="1" />
+                            </radialGradient>
+                            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6AA2FF" stop-opacity="0.8" />
+                                <stop offset="100%" stop-color="#1A4FCF" stop-opacity="0.4" />
+                            </linearGradient>
+                            <linearGradient id="orbitGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#2C6BFF" stop-opacity="0.3" />
+                                <stop offset="100%" stop-color="#4A8BFF" stop-opacity="0.8" />
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        
+                        <!-- Орбитальное кольцо (заднее) -->
+                        <ellipse cx="50" cy="50" rx="42" ry="14" 
+                                 transform="rotate(-25 50 50)" 
+                                 stroke="url(#orbitGradient)" 
+                                 stroke-width="1.5" 
+                                 fill="none" 
+                                 opacity="0.6"/>
+                        
+                        <!-- Основная сфера -->
+                        <circle cx="50" cy="48" r="32" 
+                                fill="url(#sphereGradient)" 
+                                filter="url(#glow)"
+                                opacity="0.95"/>
+                        
+                        <!-- Блик на сфере -->
+                        <ellipse cx="38" cy="35" rx="12" ry="8" 
+                                 fill="white" 
+                                 opacity="0.15" 
+                                 transform="rotate(-20 38 35)"/>
+                        
+                        <!-- Внутренняя сфера (ядро) -->
+                        <circle cx="50" cy="48" r="20" 
+                                fill="none" 
+                                stroke="rgba(255,255,255,0.15)" 
+                                stroke-width="1"/>
+                        
+                        <!-- Орбитальное кольцо (переднее) -->
+                        <ellipse cx="50" cy="50" rx="42" ry="14" 
+                                 transform="rotate(-25 50 50)" 
+                                 stroke="url(#ringGradient)" 
+                                 stroke-width="2.5" 
+                                 fill="none" 
+                                 opacity="0.9"
+                                 stroke-dasharray="8 4"/>
+                        
+                        <!-- Точка на орбите (спутник) -->
+                        <circle cx="82" cy="32" r="3.5" 
+                                fill="#6AA2FF" 
+                                filter="url(#glow)"/>
+                        
+                        <!-- Сетка на сфере (меридианы) -->
+                        <ellipse cx="50" cy="48" rx="32" ry="12" 
+                                 fill="none" 
+                                 stroke="rgba(255,255,255,0.1)" 
+                                 stroke-width="0.8"/>
+                        <ellipse cx="50" cy="48" rx="12" ry="32" 
+                                 fill="none" 
+                                 stroke="rgba(255,255,255,0.1)" 
+                                 stroke-width="0.8"/>
+                        
+                        <!-- Символ LaTeX внутри сферы -->
+                        <text x="50" y="56" 
+                              text-anchor="middle" 
+                              font-family="'Times New Roman', serif" 
+                              font-size="22" 
+                              font-weight="bold"
+                              fill="rgba(255,255,255,0.9)"
+                              filter="url(#glow)">L</text>
+                    </svg>
+                </div>
+            <div class="logo-text">
+                    <span class="logo">СФЕРА</span>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="#">О проекте</a>
+                <a href="#">Возможности</a>
+
+                <button class="btn-login" id="loginBtn">
+                    <i class="far fa-user-circle"></i> Войти
+                </button>
+
+                <button class="btn-new-project" id="RegBtn">
+                    <i class="far fa-user-circle"></i> Регистрация
+                </button>
+
+            </div>
+        </nav>
+
+        <!-- ГЛАВНЫЙ ЗАГОЛОВОК -->
+        <div class="hero-badge">
+            <i class="fas fa-code" style="margin-right: 6px;"></i> DEV & DESIGN • РОССИЙСКАЯ РАЗРАБОТКА
+        </div>
+        <h1 class="hero-title">
+            Конвертируй <span>LaTeX</span><br>
+            в Word без боли
+        </h1>
+        <p class="hero-description">
+            Отечественный аналог Overleaf с фокусом на точное преобразование формул, 
+            таблиц и библиографии. Работает прямо в браузере.
+        </p>
+
+        <button class="btn-new-project" id="createProjectBtn">
+            <i class="fas fa-plus-circle"></i> Создать проект
+        </button>
+
+        <!-- ИНФОРМАЦИЯ О ПРОЕКТЕ (СТАТИСТИКА) -->
+        <div class="info-grid">
+            <div class="info-item">
+                <h4>Время конвертации</h4>
+                <p>&lt; 3 секунды</p>
+            </div>
+            <div class="info-item">
+                <h4>Разработчик</h4>
+                <p>Саакова В.А</p>
+            </div>
+        </div>
+
+        <!-- ЧТО ВНУТРИ? (КАРТОЧКИ С ИЗОБРАЖЕНИЯ PROFICO) -->
+        <h2 class="features-title">Что входит в конвертер?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-number">01</div>
+                <h3>Быстрый старт без хлопот</h3>
+                <p>Забудьте о загрузках, сложной настройке и изучении синтаксиса. Просто начните творить.</p>
+                </div>
+            <div class="feature-card">
+              <div class="feature-number">02</div>
+                <h3>Точная математика</h3>
+                <p>Все формулы переводятся в нативный MathType / Equation Editor Word. Никаких картинок.</p>
+              </div>
+            <div class="feature-card">
+                <div class="feature-number">03</div>
+                <h3>Структура документа</h3>
+                <p>Стили заголовков, оглавление, списки литературы — всё становится редактируемым в Word.</p>
+            </div>
+        </div>
+        <!-- ОБРАТНАЯ СВЯЗЬ + FAQ -->
+        <div class="feedback-section">
+            <div class="feedback-text">
+                <h3>Остались вопросы?</h3>
+                <p>Напишите разработчику напрямую. Я отвечаю быстро.</p>
+            </div>
+            <button class="btn-feedback" id="feedbackBtn">
+                <i class="far fa-envelope" style="margin-right: 8px;"></i> Обратная связь
+            </button>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <span>© 2026 СФЕРА. Российский разработчик. Курсовой проект.</span>
+        </div>
+    </div>
+  <script src="script_site.js"></script>
+
+  <div class="modal-overlay" id="feedbackModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Обратная связь</h3>
+            <p>Заполните форму, и я отвечу вам в ближайшее время</p>
+        </div>
+        <div class="modal-body">
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle" style="margin-right: 6px;"></i>
+                Сообщение отправлено! Спасибо за обратную связь.
+            </div>
+            
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label for="feedbackName">Ваше имя</label>
+                    <input 
+                        type="text" 
+                        id="feedbackName" 
+                        name="name"
+                        placeholder="Иван Иванов"
+                        autocomplete="off"
+                        required
+                    >
+                    <div class="error-message" id="nameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedbackEmail">Email для ответа</label>
+                    <input 
+                        type="email" 
+                        id="feedbackEmail" 
+                        name="email"
+                        placeholder="ivan@example.com"
+                        autocomplete="off"
+                        required
+                    >
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedbackMessage">Сообщение</label>
+                    <textarea 
+                        id="feedbackMessage" 
+                        name="message"
+                        placeholder="Опишите ваш вопрос или предложение..."
+                        required
+                    ></textarea>
+                    <div class="error-message" id="messageError"></div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" id="cancelFeedbackBtn">Отмена</button>
+            <button class="btn-primary" id="submitFeedbackBtn">
+                <span id="submitBtnText">Отправить</span>
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
