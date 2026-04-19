@@ -680,3 +680,186 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+.btn-upload {
+    background: transparent;
+    color: #9BA1AA;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    padding: 12px 24px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-upload i {
+    font-size: 14px;
+}
+
+.btn-upload:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.file-upload-area:hover {
+    border-color: #2C6BFF !important;
+    background: rgba(44, 107, 255, 0.05) !important;
+}
+
+.file-upload-area.dragover {
+    border-color: #2C6BFF !important;
+    background: rgba(44, 107, 255, 0.1) !important;
+}
+
+#projectSelect option {
+    background: #14171C;
+    color: #FFFFFF;
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+#backToProjectsFromEditorBtn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #FFFFFF;
+}
+
+#latexEditor::-webkit-scrollbar {
+    width: 8px;
+}
+
+#latexEditor::-webkit-scrollbar-track {
+    background: #0A0C0F;
+}
+
+#latexEditor::-webkit-scrollbar-thumb {
+    background: #2C3A4A;
+    border-radius: 4px;
+}
+
+#latexEditor::-webkit-scrollbar-thumb:hover {
+    background: #3A4A5A;
+}
+
+/* === СЕКЦИЯ ПРОЕКТЫ === */
+.projects-section {
+    margin-top: 48px;
+    margin-bottom: 80px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.section-header h2 {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.project-item {
+    background: #0F1217;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.project-item:hover {
+    background: #14171C;
+    border-color: rgba(44, 107, 255, 0.2);
+}
+
+.project-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.project-icon {
+    color: #2C6BFF;
+    font-size: 20px !important;
+    width: 24px;
+    text-align: center;
+    opacity: 0.9;
+}
+
+.project-details h4 {
+    font-size: 16px !important;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #FFFFFF;
+}
+
+.project-details p {
+    color: #6C727C;
+    font-size: 12px !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.project-details p i {
+    font-size: 11px;
+    margin-right: 4px;
+}
+
+.open-project-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #B0B5BD;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.open-project-btn:hover {
+    background: #2C6BFF;
+    color: white;
+    border-color: #2C6BFF;
+}
+
+
+.project-placeholder {
+    background: #0F1217;
+    border-radius: 24px;
+    padding: 48px;
+    text-align: center;
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    color: #6C727C;
+}
+
+.project-placeholder i {
+    font-size: 40px !important;
+    margin-bottom: 20px;
+    color: #2C6BFF;
+    opacity: 0.7;
+}
+
+.project-placeholder p {
+    font-size: 16px !important;
+    margin-bottom: 8px;
+    color: #B0B5BD;
+}
+
+.project-placeholder small {
+    font-size: 13px !important;
+}
+
