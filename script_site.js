@@ -904,202 +904,260 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Конвертация в Word
+    // Конвертация в Word
     document.getElementById('convertToWordBtn')?.addEventListener('click', () => {
-        if (!currentProject) return;
-        const content = latexEditor.value;
-
-        const docMatch = content.match(/\\begin\{document\}([\s\S]*?)\\end\{document\}/);
-            if (docMatch) {
-                content = docMatch[1];
-            }
-                
-        // Улучшенная очистка для Word
-        let text = content
-            // Удаляем preamble
-            .replace(/\\documentclass.*?\n/g, '')
-            .replace(/\\usepackage.*?\n/g, '')
-            .replace(/\\title\{.*?\}\n?/g, '')
-            .replace(/\\author\{.*?\}\n?/g, '')
-            .replace(/\\date\{.*?\}\n?/g, '')
-            .replace(/\\maketitle\n?/g, '')
-            
-            // Заголовки секций
-            .replace(/\\section\*?\{(.*?)\}/g, '\n\n$1\n\n')
-            .replace(/\\subsection\*?\{(.*?)\}/g, '\n\n$1\n\n')
-            .replace(/\\subsubsection\*?\{(.*?)\}/g, '\n\n$1\n\n')
-            
-            // Форматирование текста - оставляем только текст внутри скобок
-            .replace(/\\textbf\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
-            .replace(/\\textit\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
-            .replace(/\\underline\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
-            .replace(/\\emph\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
-            .replace(/\\texttt\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
-            
-            // Удаляем команды центрирования
-            .replace(/\\centering\s*/g, '')
-            .replace(/\\centerline\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
-            
-            // Списки
-            .replace(/\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}/g, (match, items) => {
-                return items.split('\\item')
-                    .filter(item => item.trim())
-                    .map(item => '• ' + item.trim().replace(/\n/g, ' '))
-                    .join('\n');
-            })
-            .replace(/\\begin\{enumerate\}([\s\S]*?)\\end\{enumerate\}/g, (match, items) => {
-                let counter = 1;
-                return items.split('\\item')
-                    .filter(item => item.trim())
-                    .map(item => (counter++) + '. ' + item.trim().replace(/\n/g, ' '))
-                    .join('\n');
-            })
-            
-            // Математика - заменяем на текст в скобках
-            .replace(/\$\$([\s\S]*?)\$\$/g, '[$1]')
-            .replace(/\$([^$]+)\$/g, '[$1]')
-            .replace(/\\\[([\s\S]*?)\\\]/g, '[$1]')
-            .replace(/\\begin\{equation\*?\}([\s\S]*?)\\end\{equation\*?\}/g, '[$1]')
-            .replace(/\\begin\{align\*?\}([\s\S]*?)\\end\{align\*?\}/g, '[$1]')
-            
-            // Удаляем окружения proof
-            .replace(/\\begin\{proof\}(?:\[(.*?)\])?([\s\S]*?)\\end\{proof\}/g, (match, title, content) => {
-                if (title) {
-                    return '\n\n' + title + '\n' + content + '\n';
-                }
-                return '\n\nДоказательство:\n' + content + '\n';
-            })
-            
-            // Таблицы - упрощаем до текста
-            .replace(/\\begin\{table\}[\s\S]*?\\end\{table\}/g, '[Таблица]')
-            .replace(/\\begin\{tabular\}[\s\S]*?\\end\{tabular\}/g, '[Таблица]')
-            
-            // Рисунки
-            .replace(/\\begin\{figure\}[\s\S]*?\\end\{figure\}/g, '[Рисунок]')
-            .replace(/\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}/g, '[Рисунок: $1]')
-            
-            // Удаляем оставшиеся команды
-            .replace(/\\[a-zA-Z]+(\{[^}]*\})*/g, '')
-            .replace(/\\\[.*?\\\]/g, '')
-            .replace(/\{|\}/g, '')
-            
-            // Удаляем множественные переносы строк
-            .replace(/\n{3,}/g, '\n\n')
-            .replace(/^\s+|\s+$/g, '')
-            .trim();
+        if (!currentProject) {
+            showNotification('Нет открытого проекта');
+            return;
+        }
         
-        // 3. Если текст пустой
+        let content = latexEditor.value;
+        
+        // Извлекаем тело документа
+        const docMatch = content.match(/\\begin\{document\}([\s\S]*?)\\end\{document\}/);
+        if (docMatch) {
+            content = docMatch[1];
+        }
+        
+        // Удаляем \maketitle
+        content = content.replace(/\\maketitle\s*/g, '');
+        
+        // Функция для очистки текста от LaTeX команд
+        function cleanLatex(text) {
+            return text
+                // Заголовки секций
+                .replace(/\\section\*?\{(.*?)\}/g, '\n\n$1\n\n')
+                .replace(/\\subsection\*?\{(.*?)\}/g, '\n\n$1\n\n')
+                .replace(/\\subsubsection\*?\{(.*?)\}/g, '\n\n$1\n\n')
+                
+                // Форматирование текста
+                .replace(/\\textbf\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
+                .replace(/\\textit\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
+                .replace(/\\underline\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
+                .replace(/\\emph\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
+                .replace(/\\texttt\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
+                .replace(/\\textsf\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
+                .replace(/\\textrm\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
+                .replace(/\\text\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
+                
+                // Удаляем команды центрирования
+                .replace(/\\centering\s*/g, '')
+                .replace(/\\centerline\{((?:[^{}]|\{[^{}]*\})*)\}/g, '$1')
+                .replace(/\\raggedright\s*/g, '')
+                .replace(/\\raggedleft\s*/g, '')
+                
+                // Списки itemize
+                .replace(/\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}/g, (match, items) => {
+                    const listItems = items.split('\\item')
+                        .filter(item => item.trim())
+                        .map(item => '• ' + item.trim());
+                    return '\n' + listItems.join('\n') + '\n';
+                })
+                
+                // Списки enumerate
+                .replace(/\\begin\{enumerate\}([\s\S]*?)\\end\{enumerate\}/g, (match, items) => {
+                    let counter = 1;
+                    const listItems = items.split('\\item')
+                        .filter(item => item.trim())
+                        .map(item => (counter++) + '. ' + item.trim());
+                    return '\n' + listItems.join('\n') + '\n';
+                })
+                
+                // Окружение proof
+                .replace(/\\begin\{proof\}(?:\[(.*?)\])?([\s\S]*?)\\end\{proof\}/g, (match, title, proofContent) => {
+                    const header = title ? title : 'Доказательство';
+                    return '\n\n' + header + '\n' + proofContent + '\n';
+                })
+                
+                // Математика
+                .replace(/\\\[([\s\S]*?)\\\]/g, '[$1]')
+                .replace(/\$\$([\s\S]*?)\$\$/g, '[$1]')
+                .replace(/\$([^$]+)\$/g, '[$1]')
+                .replace(/\\begin\{equation\*?\}([\s\S]*?)\\end\{equation\*?\}/g, '[$1]')
+                .replace(/\\begin\{align\*?\}([\s\S]*?)\\end\{align\*?\}/g, '[$1]')
+                
+                // Таблицы и рисунки
+                .replace(/\\begin\{table\}[\s\S]*?\\end\{table\}/g, '[Таблица]')
+                .replace(/\\begin\{figure\}[\s\S]*?\\end\{figure\}/g, '[Рисунок]')
+                .replace(/\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}/g, '[Рисунок]')
+                
+                // Удаляем оставшиеся команды LaTeX
+                .replace(/\\[a-zA-Z]+(\{[^}]*\})?(\{[^}]*\})?/g, '')
+                .replace(/\\[a-zA-Z]+\[[^\]]*\]/g, '')
+                
+                // Удаляем фигурные скобки
+                .replace(/\{|\}/g, '')
+                
+                // Удаляем символы табуляции
+                .replace(/\\&\s*/g, '')
+                .replace(/\\\\\s*/g, '\n')
+                .replace(/\\hline\s*/g, '')
+                .replace(/\\cline(\{[^}]*\})?\s*/g, '')
+                
+                // Чистим множественные переносы строк
+                .replace(/\n{3,}/g, '\n\n')
+                .replace(/^\s+|\s+$/g, '')
+                .trim();
+        }
+        
+        // Очищаем контент
+        let text = cleanLatex(content);
+        
+        // Если текст пустой
         if (!text) {
             text = 'Документ пуст';
         }
         
-        // 4. Создаём заголовок документа
-        const title = currentProject.name;
-        const author = 'СФЕРА';
-        const date = new Date().toLocaleDateString('ru-RU');
+        // Получаем метаданные
+        let title = currentProject.name;
+        const titleMatch = latexEditor.value.match(/\\title\{(.*?)\}/);
+        if (titleMatch) title = titleMatch[1].replace(/[{}]/g, '').trim();
         
-        // 5. Формируем HTML-контент для Word (с правильными стилями)
-        const wordContent = `
-            <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:m="http://schemas.microsoft.com/office/2004/12/omml" xmlns="http://www.w3.org/TR/REC-html40">
+        let author = 'СФЕРА';
+        const authorMatch = latexEditor.value.match(/\\author\{(.*?)\}/);
+        if (authorMatch) author = authorMatch[1].replace(/[{}]/g, '').trim();
+        
+        let date = new Date().toLocaleDateString('ru-RU');
+        const dateMatch = latexEditor.value.match(/\\date\{(.*?)\}/);
+        if (dateMatch) {
+            let dateText = dateMatch[1].replace(/[{}]/g, '').trim();
+            date = dateText === '\\today' ? date : dateText;
+        }
+        
+        // Формируем HTML для Word
+        const wordHtml = `
+            <!DOCTYPE html>
+            <html>
             <head>
                 <meta charset="UTF-8">
                 <title>${title}</title>
                 <style>
                     body {
-                        font-family: 'Times New Roman', serif;
+                        font-family: 'Times New Roman', Times, serif;
                         font-size: 14pt;
                         line-height: 1.5;
-                        margin: 2.5cm 2cm 2cm 2cm;
+                        margin: 2.54cm 2cm 2cm 2cm;
                         color: #000000;
+                        background: #ffffff;
                     }
                     h1 {
                         font-size: 24pt;
                         font-weight: bold;
                         text-align: center;
                         margin-bottom: 10pt;
+                        page-break-after: avoid;
                     }
-                    .author-date {
+                    .subtitle {
                         text-align: center;
-                        color: #666666;
-                        border-bottom: 1px solid #cccccc;
+                        color: #333333;
+                        border-bottom: 1px solid #999999;
                         padding-bottom: 15pt;
                         margin-bottom: 20pt;
+                        font-size: 12pt;
                     }
                     h2 {
                         font-size: 18pt;
                         font-weight: bold;
                         margin-top: 20pt;
                         margin-bottom: 10pt;
+                        page-break-after: avoid;
                     }
                     h3 {
                         font-size: 16pt;
                         font-weight: bold;
                         margin-top: 16pt;
                         margin-bottom: 8pt;
+                        page-break-after: avoid;
                     }
                     p {
-                        margin-bottom: 10pt;
+                        margin: 0 0 10pt 0;
                         text-align: justify;
                         text-indent: 1.25cm;
                     }
-                    p:first-of-type {
+                    p.no-indent {
                         text-indent: 0;
                     }
                     ul, ol {
-                        margin: 10pt 0;
+                        margin: 10pt 0 10pt 0;
                         padding-left: 30pt;
                     }
                     li {
                         margin: 4pt 0;
+                        text-align: justify;
                     }
                     .formula {
                         text-align: center;
                         margin: 15pt 0;
-                        font-style: italic;
+                        font-style: normal;
+                    }
+                    .footer {
+                        margin-top: 30pt;
+                        text-align: center;
+                        color: #666666;
+                        font-size: 10pt;
+                        border-top: 1px solid #cccccc;
+                        padding-top: 10pt;
                     }
                 </style>
             </head>
             <body>
                 <h1>${title}</h1>
-                <div class="author-date">${author} • ${date}</div>
-                ${text.split('\n\n').map(paragraph => {
-                    if (paragraph.startsWith('• ') || paragraph.match(/^\d+\. /)) {
-                        // Это список
-                        const items = paragraph.split('\n');
-                        if (paragraph.startsWith('• ')) {
-                            return '<ul>' + items.map(item => '<li>' + item.replace(/^• /, '') + '</li>').join('') + '</ul>';
-                        } else {
-                            return '<ol>' + items.map(item => '<li>' + item.replace(/^\d+\. /, '') + '</li>').join('') + '</ol>';
-                        }
-                    } else if (paragraph.includes('[') && paragraph.includes(']') && paragraph.length < 100) {
-                        // Формула
-                        return '<div class="formula">' + paragraph + '</div>';
-                    } else {
-                        // Обычный параграф
-                        return '<p>' + paragraph.replace(/\n/g, '<br>') + '</p>';
+                <div class="subtitle">${author} • ${date}</div>
+                ${text.split('\n\n').map(para => {
+                    para = para.trim();
+                    if (!para) return '';
+                    
+                    // Проверяем, является ли параграф списком
+                    if (para.includes('• ') && para.split('\n').every(line => line.trim().startsWith('• '))) {
+                        const items = para.split('\n').map(line => line.replace(/^• /, '').trim());
+                        return '<ul>\n' + items.map(item => '<li>' + item + '</li>').join('\n') + '\n</ul>';
                     }
+                    
+                    // Нумерованный список
+                    if (para.match(/^\d+\. /) && para.split('\n').every(line => line.trim().match(/^\d+\. /))) {
+                        const items = para.split('\n').map(line => line.replace(/^\d+\. /, '').trim());
+                        return '<ol>\n' + items.map(item => '<li>' + item + '</li>').join('\n') + '\n</ol>';
+                    }
+                    
+                    // Формула (короткая строка с квадратными скобками)
+                    if (para.startsWith('[') && para.endsWith(']') && para.length < 200) {
+                        return '<div class="formula">' + para + '</div>';
+                    }
+                    
+                    // Обычный параграф
+                    return '<p>' + para.replace(/\n/g, '<br>') + '</p>';
                 }).join('\n')}
-                <hr style="margin-top: 30pt;">
-                <p style="text-align: center; color: #999999; font-size: 10pt; text-indent: 0;">
+                <div class="footer">
                     Создано в СФЕРА - Российский LaTeX редактор
-                </p>
+                </div>
             </body>
             </html>
         `;
         
-        // 6. Создаём и скачиваем файл
-        const blob = new Blob([wordContent], { 
-            type: 'application/msword;charset=utf-8' 
-        });
-        
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `${title.replace(/[^a-zA-Zа-яА-Я0-9]/g, '_')}.doc`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(a.href);
-        
-        showNotification('✅ Документ Word готов!');
+        // Создаём и скачиваем файл
+        try {
+            const blob = new Blob([wordHtml], { 
+                type: 'application/msword;charset=utf-8' 
+            });
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${title.replace(/[^a-zA-Zа-яА-Я0-9\s]/g, '_')}.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+            }, 100);
+            
+            showNotification('✅ Документ Word скачан!');
+            
+        } catch (error) {
+            console.error('Ошибка при создании Word файла:', error);
+            showNotification('❌ Ошибка при создании файла');
+        }
     });
 
     // Escape
