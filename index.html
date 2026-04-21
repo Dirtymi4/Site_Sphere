@@ -7,55 +7,52 @@
     <link rel="stylesheet" href="style_site.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Конфигурация MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                packages: {'[+]': ['ams']}
+            },
+            options: { ignoreHtmlClass: 'no-mathjax' },
+            loader: { load: ['[tex]/ams'] }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
 </head>
 <body>
 
-<!-- ========================================== -->
-<!-- ГЛАВНАЯ СТРАНИЦА (MAIN PAGE) -->
-<!-- ========================================== -->
+<!-- ГЛАВНАЯ СТРАНИЦА -->
 <div id="mainPage">
     <div class="container">
-        <!-- НАВИГАЦИОННОЕ МЕНЮ -->
         <nav class="navbar">
             <div class="logo-wrapper">
                 <div class="logo-icon">
                     <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <radialGradient id="sphereGradient" cx="35%" cy="30%" r="50%" fx="30%" fy="25%">
-                                <stop offset="0%" stop-color="#4A8BFF" stop-opacity="1" />
-                                <stop offset="60%" stop-color="#2C6BFF" stop-opacity="1" />
-                                <stop offset="100%" stop-color="#0F3B9E" stop-opacity="1" />
+                            <radialGradient id="sphereGradient" cx="35%" cy="30%" r="50%">
+                                <stop offset="0%" stop-color="#4A8BFF" />
+                                <stop offset="60%" stop-color="#2C6BFF" />
+                                <stop offset="100%" stop-color="#0F3B9E" />
                             </radialGradient>
-                            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#6AA2FF" stop-opacity="0.8" />
-                                <stop offset="100%" stop-color="#1A4FCF" stop-opacity="0.4" />
-                            </linearGradient>
-                            <linearGradient id="orbitGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#2C6BFF" stop-opacity="0.3" />
-                                <stop offset="100%" stop-color="#4A8BFF" stop-opacity="0.8" />
-                            </linearGradient>
                             <filter id="glow">
-                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feGaussianBlur stdDeviation="3" result="blur"/>
                                 <feMerge>
-                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="blur"/>
                                     <feMergeNode in="SourceGraphic"/>
                                 </feMerge>
                             </filter>
                         </defs>
-                        <ellipse cx="50" cy="50" rx="42" ry="14" transform="rotate(-25 50 50)" stroke="url(#orbitGradient)" stroke-width="1.5" fill="none" opacity="0.6"/>
                         <circle cx="50" cy="48" r="32" fill="url(#sphereGradient)" filter="url(#glow)" opacity="0.95"/>
                         <ellipse cx="38" cy="35" rx="12" ry="8" fill="white" opacity="0.15" transform="rotate(-20 38 35)"/>
-                        <circle cx="50" cy="48" r="20" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                        <ellipse cx="50" cy="50" rx="42" ry="14" transform="rotate(-25 50 50)" stroke="url(#ringGradient)" stroke-width="2.5" fill="none" opacity="0.9" stroke-dasharray="8 4"/>
-                        <circle cx="82" cy="32" r="3.5" fill="#6AA2FF" filter="url(#glow)"/>
-                        <ellipse cx="50" cy="48" rx="32" ry="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
-                        <ellipse cx="50" cy="48" rx="12" ry="32" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
-                        <text x="50" y="56" text-anchor="middle" font-family="'Times New Roman', serif" font-size="22" font-weight="bold" fill="rgba(255,255,255,0.9)" filter="url(#glow)">L</text>
+                        <text x="50" y="57" text-anchor="middle" font-family="'Times New Roman', serif" font-size="28" font-weight="bold" fill="rgba(255,255,255,0.9)" filter="url(#glow)">L</text>
                     </svg>
                 </div>
-                <div class="logo-text">
-                    <span class="logo">СФЕРА</span>
-                </div>
+                <div class="logo-text"><span class="logo">СФЕРА</span></div>
             </div>
             <div class="nav-links">
                 <a href="#">О проекте</a>
@@ -65,15 +62,9 @@
             </div>
         </nav>
 
-        <!-- ГЛАВНЫЙ ЗАГОЛОВОК -->
-        <div class="hero-badge">
-            <i class="fas fa-code" style="margin-right: 6px;"></i> DEV & DESIGN • РОССИЙСКАЯ РАЗРАБОТКА
-        </div>
+        <div class="hero-badge"><i class="fas fa-code"></i> DEV & DESIGN • РОССИЙСКАЯ РАЗРАБОТКА</div>
         <h1 class="hero-title">Онлайн редактор <span>LaTeX</span></h1>
-        <p class="hero-description">
-            Отечественный аналог Overleaf с фокусом на точное преобразование формул, 
-            таблиц и библиографии. Работает прямо в браузере.
-        </p>
+        <p class="hero-description">Отечественный аналог Overleaf. Работает прямо в браузере.</p>
 
         <div style="display: flex; gap: 16px;">
             <button class="btn-new-project" id="createProjectBtn"><i class="fas fa-plus-circle"></i> Создать проект</button>
@@ -82,80 +73,43 @@
 
         <!-- СЕКЦИЯ ПРОЕКТОВ -->
         <div class="projects-section">
-            <div class="section-header">
-                <h2>Ваши проекты</h2>
-            </div>
-            <div class="project-placeholder" id="projectListPlaceholder">
+            <div class="section-header"><h2>Ваши проекты</h2></div>
+            <div id="projectListPlaceholder" class="project-placeholder">
                 <i class="fas fa-cloud-upload-alt"></i>
                 <p>У вас пока нет проектов</p>
                 <small>Нажмите «Создать проект», чтобы начать</small>
             </div>
         </div>
 
-        <!-- ИНФОРМАЦИЯ -->
         <div class="info-grid">
-            <div class="info-item">
-                <h4>Время конвертации</h4>
-                <p>&lt; 3 секунды</p>
-            </div>
-            <div class="info-item">
-                <h4>Разработчик</h4>
-                <p>Саакова В.А</p>
-            </div>
+            <div class="info-item"><h4>Время конвертации</h4><p>&lt; 3 секунды</p></div>
+            <div class="info-item"><h4>Разработчик</h4><p>Саакова В.А</p></div>
         </div>
 
-        <!-- КАРТОЧКИ -->
         <h2 class="features-title">Что входит в конвертер?</h2>
         <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-number">01</div>
-                <h3>Быстрый старт без хлопот</h3>
-                <p>Забудьте о загрузках, сложной настройке и изучении синтаксиса. Просто начните творить.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-number">02</div>
-                <h3>Точная математика</h3>
-                <p>Все формулы переводятся в нативный MathType / Equation Editor Word. Никаких картинок.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-number">03</div>
-                <h3>Структура документа</h3>
-                <p>Стили заголовков, оглавление, списки литературы — всё становится редактируемым в Word.</p>
-            </div>
+            <div class="feature-card"><div class="feature-number">01</div><h3>Быстрый старт</h3><p>Забудьте о загрузках и сложной настройке.</p></div>
+            <div class="feature-card"><div class="feature-number">02</div><h3>Точная математика</h3><p>Формулы в нативный MathType.</p></div>
+            <div class="feature-card"><div class="feature-number">03</div><h3>Структура</h3><p>Заголовки, оглавление — всё в Word.</p></div>
         </div>
 
-        <!-- ОБРАТНАЯ СВЯЗЬ -->
         <div class="feedback-section">
-            <div class="feedback-text">
-                <h3>Остались вопросы?</h3>
-                <p>Напишите разработчику напрямую. Я отвечаю быстро.</p>
-            </div>
+            <div class="feedback-text"><h3>Остались вопросы?</h3><p>Напишите разработчику.</p></div>
             <button class="btn-feedback" id="feedbackBtn"><i class="far fa-envelope"></i> Обратная связь</button>
         </div>
 
-        <!-- FOOTER -->
-        <div class="footer">
-            <span>© 2026 СФЕРА. Российский разработчик. Курсовой проект.</span>
-        </div>
+        <div class="footer"><span>© 2026 СФЕРА. Российский разработчик. Курсовой проект.</span></div>
     </div>
 </div>
 
-<!-- ========================================== -->
-<!-- РЕДАКТОР LATEX (EDITOR PAGE) - СКРЫТ -->
-<!-- ========================================== -->
+<!-- РЕДАКТОР -->
 <div id="editorPage" style="display: none; min-height: 100vh; padding: 24px;">
-    <!-- Шапка редактора -->
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px;">
         <div style="display: flex; align-items: center; gap: 20px;">
-            <button id="backToMainBtn" style="background: transparent; border: none; color: #9BA1AA; font-size: 20px; cursor: pointer; padding: 8px; border-radius: 8px;">
-                <i class="fas fa-arrow-left"></i>
-            </button>
+            <button id="backToMainBtn" style="background: transparent; border: none; color: #9BA1AA; font-size: 20px; cursor: pointer;"><i class="fas fa-arrow-left"></i></button>
             <div>
-                <h2 id="editorProjectName" style="font-size: 24px; font-weight: 600;">Название проекта</h2>
-                <p style="color: #6C727C; font-size: 13px;">
-                    <span id="editorFileName">main.tex</span> • 
-                    <span id="editorFileStatus">Сохранено</span>
-                </p>
+                <h2 id="editorProjectName" style="font-size: 24px;">Название проекта</h2>
+                <p style="color: #6C727C;"><span id="editorFileName">main.tex</span> • <span id="editorFileStatus">Сохранено</span></p>
             </div>
         </div>
         <div style="display: flex; gap: 12px;">
@@ -164,50 +118,34 @@
         </div>
     </div>
 
-    <!-- Панели редактора -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: calc(100vh - 140px);">
-        <!-- Левая панель -->
-        <div style="background: #0F1217; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column;">
+        <!-- Левая панель - редактор -->
+        <div style="background: #0F1217; border-radius: 12px; display: flex; flex-direction: column;">
             <div style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between;">
                 <span style="color: #B0B5BD;"><i class="far fa-file-code"></i> Редактор LaTeX</span>
                 <button id="saveFileBtn" style="background: transparent; border: none; color: #2C6BFF; cursor: pointer;"><i class="far fa-save"></i> Сохранить</button>
             </div>
-            <textarea id="latexEditor" style="flex: 1; background: #0A0C0F; border: none; color: #FFF; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.5; padding: 16px; resize: none; outline: none;" spellcheck="false"></textarea>
+            <textarea id="latexEditor" style="flex: 1; background: #0A0C0F; border: none; color: #FFF; font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.6; padding: 16px; resize: none; outline: none;" spellcheck="false"></textarea>
         </div>
-        <!-- Правая панель -->
-        <div style="background: #FFF; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column;">
-            <div style="padding: 12px 16px; background: #14171C; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                <span style="color: #B0B5BD;"><i class="far fa-eye"></i> Предпросмотр PDF</span>
-            </div>
-            <div id="pdfPreview" style="flex: 1; background: #525659; display: flex; justify-content: center; align-items: center; padding: 20px;">
-                <div style="background: white; width: 100%; height: 100%; border-radius: 4px; padding: 40px; overflow-y: auto; color: #000; font-family: 'Times New Roman', serif;">
-                    <h1 style="font-size: 24px;">Новый документ</h1>
-                    <p style="color: #666;">СФЕРА • 19 апреля 2026</p>
-                    <h2>1 Введение</h2>
-                    <p>Здесь начинается ваш документ LaTeX.</p>
-                    <p style="text-align: center;"><i>E = mc²</i> (1)</p>
-                </div>
+        
+        <!-- Правая панель - ПРЕДПРОСМОТР -->
+        <div style="background: #1E2126; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); overflow: auto; display: flex; justify-content: center; padding: 30px 20px;">
+            <div id="pdfPreview" style="background: white; width: 100%; max-width: 210mm; min-height: 297mm; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 20mm 15mm; color: #1a1a1a; font-family: 'Times New Roman', serif; line-height: 1.5; font-size: 12pt; margin: 0 auto;">
+                <div style="text-align: center; padding: 30px 0; color: #999;">📄 Нажмите «Компилировать»</div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ========================================== -->
 <!-- МОДАЛЬНЫЕ ОКНА -->
-<!-- ========================================== -->
-
-<!-- Модальное окно создания проекта -->
 <div class="modal-overlay" id="createProjectModal">
     <div class="modal">
-        <div class="modal-header">
-            <h3>Создать новый проект</h3>
-            <p>Введите название для вашего LaTeX проекта</p>
-        </div>
+        <div class="modal-header"><h3>Создать новый проект</h3><p>Введите название для вашего LaTeX проекта</p></div>
         <div class="modal-body">
             <div class="input-group">
                 <label for="projectName">Название проекта</label>
-                <input type="text" id="projectName" placeholder="Например: Курсовая работа" autocomplete="off" maxlength="50">
-                <div class="hint">Можно использовать буквы, цифры, пробелы и дефисы</div>
+                <input type="text" id="projectName" placeholder="Например: Курсовая работа" maxlength="50">
+                <div class="hint">Буквы, цифры, пробелы и дефисы</div>
                 <div class="error-message" id="projectNameError"></div>
             </div>
         </div>
@@ -218,31 +156,15 @@
     </div>
 </div>
 
-<!-- Модальное окно обратной связи -->
 <div class="modal-overlay" id="feedbackModal">
     <div class="modal">
-        <div class="modal-header">
-            <h3>Обратная связь</h3>
-            <p>Заполните форму, и я отвечу вам в ближайшее время</p>
-        </div>
+        <div class="modal-header"><h3>Обратная связь</h3><p>Заполните форму, и я отвечу вам</p></div>
         <div class="modal-body">
             <div class="success-message" id="successMessage"><i class="fas fa-check-circle"></i> Сообщение отправлено!</div>
             <form id="feedbackForm">
-                <div class="form-group">
-                    <label for="feedbackName">Ваше имя</label>
-                    <input type="text" id="feedbackName" placeholder="Иван" required>
-                    <div class="error-message" id="nameError"></div>
-                </div>
-                <div class="form-group">
-                    <label for="feedbackEmail">Email</label>
-                    <input type="email" id="feedbackEmail" placeholder="ivan@example.com" required>
-                    <div class="error-message" id="emailError"></div>
-                </div>
-                <div class="form-group">
-                    <label for="feedbackMessage">Сообщение</label>
-                    <textarea id="feedbackMessage" placeholder="Опишите ваш вопрос..." required></textarea>
-                    <div class="error-message" id="messageError"></div>
-                </div>
+                <div class="form-group"><label for="feedbackName">Ваше имя</label><input type="text" id="feedbackName" placeholder="Иван"></div>
+                <div class="form-group"><label for="feedbackEmail">Email</label><input type="email" id="feedbackEmail" placeholder="ivan@example.com"></div>
+                <div class="form-group"><label for="feedbackMessage">Сообщение</label><textarea id="feedbackMessage" placeholder="Опишите ваш вопрос..."></textarea></div>
             </form>
         </div>
         <div class="modal-footer">
@@ -252,25 +174,20 @@
     </div>
 </div>
 
-<!-- Модальное окно загрузки файла -->
 <div class="modal-overlay" id="uploadModal">
     <div class="modal">
-        <div class="modal-header">
-            <h3>Загрузить LaTeX файл</h3>
-            <p>Поддерживаются только файлы с расширением .tex</p>
-        </div>
+        <div class="modal-header"><h3>Загрузить LaTeX файл</h3><p>Поддерживаются только файлы .tex</p></div>
         <div class="modal-body">
-            <div class="success-message" id="uploadSuccessMessage"><i class="fas fa-check-circle"></i> Файл успешно загружен!</div>
+            <div class="success-message" id="uploadSuccessMessage"><i class="fas fa-check-circle"></i> Файл загружен!</div>
             <div class="form-group">
                 <label for="projectSelect">Выберите проект</label>
                 <select id="projectSelect"><option value="">-- Выберите проект --</option></select>
-                <div class="error-message" id="projectSelectError"></div>
             </div>
             <div class="form-group">
                 <label>Файл LaTeX</label>
                 <div class="file-upload-area" id="fileUploadArea">
                     <input type="file" id="fileInput" accept=".tex" style="display: none;">
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #2C6BFF; margin-bottom: 16px;"></i>
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #2C6BFF;"></i>
                     <p><span id="fileName">Нажмите для выбора файла</span></p>
                     <small>или перетащите файл сюда</small>
                 </div>
@@ -278,10 +195,10 @@
             </div>
             <div id="fileInfo" style="display: none; margin-top: 16px;">
                 <div style="background: rgba(44,107,255,0.1); padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 12px;">
-                    <i class="fas fa-file-code" style="color: #2C6BFF; font-size: 20px;"></i>
+                    <i class="fas fa-file-code" style="color: #2C6BFF;"></i>
                     <div style="flex: 1;">
-                        <p style="color: #FFF; font-size: 14px; margin-bottom: 4px;" id="selectedFileName"></p>
-                        <p style="color: #6C727C; font-size: 12px;" id="selectedFileSize"></p>
+                        <p id="selectedFileName" style="color: #FFF;"></p>
+                        <p id="selectedFileSize" style="color: #6C727C;"></p>
                     </div>
                     <button id="removeFileBtn" style="background: transparent; border: none; color: #FF4D4D; cursor: pointer; font-size: 18px;">×</button>
                 </div>
